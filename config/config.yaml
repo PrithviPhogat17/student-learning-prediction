@@ -1,0 +1,36 @@
+# Central configuration. Paths are relative to the project root.
+dataset:
+  raw_dir: data/raw
+  demo_dir: data/demo
+  course_file: student-mat.csv      # Mathematics course. Do NOT merge with student-por.csv (many of the same students appear in both files).
+  separator: ";"
+  pass_mark: 10                     # Portuguese 0-20 scale: final grade G3 < 10 means "at risk of not passing"
+
+task:
+  include_prior_grades: true        # true: use G1 and G2 (early-warning after period 2). false: harder, no prior grades.
+
+split:
+  test_size: 0.20                   # fraction of all rows held out for the final test
+  val_size: 0.20                    # fraction of all rows used for validation / early stopping
+  seed: 42
+
+model:
+  hidden_units: [64, 32]
+  dropout: 0.3
+  l2: 0.0001
+  learning_rate: 0.001
+  batch_size: 32
+  max_epochs: 300
+  patience: 25                      # early-stopping patience (epochs)
+  decision_threshold: 0.5           # probability >= threshold -> "at risk". Fixed in advance, not tuned on test data.
+  use_class_weights: true
+
+paths:
+  models_dir: models
+  reports_dir: reports
+  processed_dir: data/processed
+
+recommendations:
+  risk_low: 0.30                    # below this predicted probability -> "lower" risk band
+  risk_high: 0.60                   # at/above this -> "higher" risk band
+  high_absences: 10
